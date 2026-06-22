@@ -1,6 +1,3 @@
-# One-click backend + database (and optional static frontend) on Render.
-# In Render: New > Blueprint > point at this repo. It provisions the API and a
-# free Postgres, runs the seed, and starts the server.
 services:
   - type: web
     name: caliber-api
@@ -11,19 +8,16 @@ services:
     startCommand: python -m app.seed && uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.6
       - key: DATABASE_URL
         fromDatabase:
           name: caliber-db
           property: connectionString
       - key: KAFKA_TOPIC
         value: inference-events
-      # Optional streaming: set to your Upstash Kafka bootstrap server to enable
-      # the live Kafka consumer. Leave unset to run REST + WebSocket only.
       - key: KAFKA_BOOTSTRAP_SERVERS
         sync: false
-
-  # Optional: host the React dashboard on Render too. After the API is live,
-  # set VITE_API_URL / VITE_WS_URL below to the API URL and redeploy.
   - type: web
     name: caliber-web
     runtime: static
@@ -37,10 +31,9 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        sync: false   # e.g. https://caliber-api.onrender.com
+        sync: false
       - key: VITE_WS_URL
-        sync: false   # e.g. wss://caliber-api.onrender.com/ws/live
-
+        sync: false
 databases:
   - name: caliber-db
     plan: free
