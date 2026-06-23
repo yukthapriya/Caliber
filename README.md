@@ -22,11 +22,11 @@ The two different ECE values are computed server-side from stored predictions, s
 
 ## Screenshots
 
-![Calibration reliability diagram](docs/caliber-calibration.png)
+![Calibration reliability diagram](caliber-calibration.png)
 
 Reliability diagram: the production model tracks the ideal diagonal (ECE 0.044), while the candidate is over-confident — its accuracy sits below its confidence in nearly every bin (ECE 0.167).
 
-![Risk–coverage curve](docs/caliber-risk-coverage.png)
+![Risk–coverage curve](caliber-risk-coverage.png)
 
 Risk–coverage: error rate as each model is forced to answer more of its lower-confidence cases. Lower area under the curve is better (production AURC 0.155 vs candidate 0.288).
 
