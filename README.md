@@ -8,8 +8,27 @@ predictions to a human before they cause harm.
 It is the productized version of the calibration, selective-prediction, and robustness ideas
 from my research on reliable vision-language models (MedProbCLIP, WACV 2026; AAAI 2025).
 
-- **Live API:** https://caliber-api.onrender.com (interactive docs at `/docs`)
+- **Live API:** https://caliber-api.onrender.com
 - **Stack:** React + TypeScript (Vite, Recharts) · FastAPI (Python) · PostgreSQL · Kafka + WebSocket
+
+### Try it live
+
+- Health: https://caliber-api.onrender.com/health → `{"status":"ok"}`
+- Interactive API docs: https://caliber-api.onrender.com/docs
+- Calibration, production model: https://caliber-api.onrender.com/api/calibration?model_version_id=1 → `"ece":0.0437`
+- Calibration, over-confident candidate: https://caliber-api.onrender.com/api/calibration?model_version_id=2 → `"ece":0.1669`
+
+The two different ECE values are computed server-side from stored predictions, so they are measurements rather than fixed constants. (The free instance sleeps after about 15 minutes idle, so the first request may take ~50 seconds to wake.)
+
+## Screenshots
+
+![Calibration reliability diagram](docs/caliber-calibration.png)
+
+Reliability diagram: the production model tracks the ideal diagonal (ECE 0.044), while the candidate is over-confident — its accuracy sits below its confidence in nearly every bin (ECE 0.167).
+
+![Risk–coverage curve](docs/caliber-risk-coverage.png)
+
+Risk–coverage: error rate as each model is forced to answer more of its lower-confidence cases. Lower area under the curve is better (production AURC 0.155 vs candidate 0.288).
 
 ---
 
